@@ -1,8 +1,9 @@
 name: Backend CI/CD
 on:
+   workflow_dispatch:
    push:
      branches: [main]
-     paths: ['server/**'] # only when backend code changes
+     paths: ['backend/**'] # only when backend code changes
 jobs:
     build-and-push:
        runs-on: ubuntu-latest
@@ -14,7 +15,7 @@ jobs:
                 DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
                 DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
                 IMAGE: mern-server
-                CONTEXT: ./server
+                CONTEXT: ./backend
 
     deploy:
        needs: build-and-push # only after the image is pushed

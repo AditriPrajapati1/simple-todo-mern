@@ -1,8 +1,9 @@
 name: Frontend CI/CD
 on:
+  workflow_dispatch:
  push:
    branches: [main]
-   paths: ['client/**'] # only when frontend code changes
+   paths: ['frontend/**'] # only when frontend code changes
 jobs:
    build-and-push:
     runs-on: ubuntu-latest
@@ -14,7 +15,7 @@ jobs:
          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
          IMAGE: mern-client # <- different image
-         CONTEXT: ./client # <- different folder
+         CONTEXT: ./frontend # <- different folder
    deploy:
      needs: build-and-push
      runs-on: ubuntu-latest

@@ -12,6 +12,6 @@ jobs:
          run: echo "${{ secrets.DOCKERHUB_TOKEN }}" |
            docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
        - name: Build the image
-         run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/mern-server:latest ./server
+         run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/mern-server:latest./server
        - name: Push the image
          run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/mern-server:latest

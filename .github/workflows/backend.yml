@@ -1,38 +1,37 @@
 name: Backend CI/CD
 on:
-   workflow_dispatch:
-   push:
-     branches: [main]
-     paths: ['backend/**ex'] # only when backend code changes
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['backend/**']
 jobs:
-    build-and-push:
-       runs-on: ubuntu-latest
-       steps:
-          - uses: actions/checkout@v4
-          - name: Build and push
-            run: bash scripts/build-and-push.sh
-            env:
-                DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-                DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-                IMAGE: mern-server
-                CONTEXT: ./backend
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and push
+        run: bash scripts/build-and-push.sh
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+          IMAGE: mern-server
+          CONTEXT: ./backend
 
-    deploy:
-       needs: build-and-push # only after the image is pushed
-       runs-on: ubuntu-latest
-       steps:
-          - uses: actions/checkout@v4
-          - name: Deploy to EC2
-            run: bash scripts/deploy.sh
-            env:
-                DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-                IMAGE: mern-server
-                CONTAINER: mern-server
-                PORT: 4200
-                EC2_HOST: ${{ secrets.EC2_HOST }}
-                EC2_USER: ${{ secrets.EC2_USER }}
-                EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
-      
-
-
-
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to EC2
+        run: bash scripts/deploy.sh
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          IMAGE: mern-server
+          CONTAINER: mern-server
+          HOST_PORT: 5000
+          CONTAINER_PORT: 5000
+          NETWORK_FLAG: "--network app-net"
+          ENV_FLAGS: "-e MONGO_URI=mongodb://mongo:27017/simple-mern-todo"
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}

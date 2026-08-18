@@ -16,6 +16,7 @@ jobs:
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
           IMAGE: mern-client
           CONTEXT: ./frontend
+          VITE_API_URL: http://34.233.194.205:5000/api
 
   deploy:
     needs: build-and-push

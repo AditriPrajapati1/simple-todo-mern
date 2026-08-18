@@ -3,7 +3,7 @@ on:
    workflow_dispatch:
    push:
      branches: [main]
-     paths: ['backend/**'] # only when backend code changes
+     paths: ['backend/**ex'] # only when backend code changes
 jobs:
     build-and-push:
        runs-on: ubuntu-latest
